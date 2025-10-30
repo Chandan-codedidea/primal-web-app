@@ -1,9 +1,7 @@
 import { Component, lazy } from 'solid-js';
 import { Router, Route, Navigate, cache } from "@solidjs/router";
-
 import { PrimalWindow } from './types/primal';
 import { fetchKnownProfiles } from './lib/profile';
-
 import { useHomeContext } from './contexts/HomeContext';
 import { useExploreContext } from './contexts/ExploreContext';
 import { useThreadContext } from './contexts/ThreadContext';
@@ -16,6 +14,7 @@ import { useSearchContext } from './contexts/SearchContext';
 import { useDMContext } from './contexts/DMContext';
 import { generateNsec, nip19 } from './lib/nTools';
 import Blossom from './pages/Settings/Blossom';
+import CryptoRedirect from './components/CryptoRedirect';
 
 const Home = lazy(() => import('./pages/Home'));
 const Reads = lazy(() => import('./pages/Reads'));
@@ -36,42 +35,32 @@ const EditProfile = lazy(() => import('./pages/EditProfile'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Mutelist = lazy(() => import('./pages/Mutelist'));
 const CreateAccount = lazy(() => import('./pages/CreateAccount')); 
-
 const NotifSettings = lazy(() => import('./pages/Settings/Notifications'));
 const Account = lazy(() => import('./pages/Settings/Account'));
-const Appearance = lazy(() => import('./pages/Settings/Appearance'));
 const HomeFeeds = lazy(() => import('./pages/Settings/HomeFeeds'));
 const ReadsFeeds = lazy(() => import('./pages/Settings/ReadsFeeds'));
-const DevTools = lazy(() => import('./pages/Settings/DevTools'));
 const ZapSettings = lazy(() => import('./pages/Settings/Zaps'));
 const Muted = lazy(() => import('./pages/Settings/Muted'));
 const Network = lazy(() => import('./pages/Settings/Network'));
 const Moderation = lazy(() => import('./pages/Settings/Moderation'));
 const NostrWalletConnect = lazy(() => import('./pages/Settings/NostrWalletConnect'));
 const Menu = lazy(() => import('./pages/Settings/Menu'));
-const BlossomSettings = lazy(() => import('./pages/Settings/Blossom'));
 // const Landing = lazy(() => import('./pages/Landing'));
 const AppDownloadQr = lazy(() => import('./pages/appDownloadQr'));
-
 const Terms = lazy(() => import('./pages/Terms'));
 const Privacy = lazy(() => import('./pages/Privacy'));
 const Support = lazy(() => import('./pages/Support'));
 const Csae = lazy(() => import('./pages/Csae'));
-
 const Feeds = lazy(() => import('./pages/FeedsTest'));
 const Feed = lazy(() => import('./pages/FeedQueryTest'));
 const AdvancedSearch = lazy(() => import('./pages/AdvancedSearch'));
 const AdvancedSearchResults = lazy(() => import('./pages/AdvancedSearchResults'));
 const ReadsEditor = lazy(() => import('./pages/ReadsEditor'));
 const ReadsMy = lazy(() => import('./pages/ReadsMy'));
-
-
 const Streaming = lazy(() => import('./pages/StreamPage'));
-
 const CitadelPage = lazy(() => import(`./pages/CitadelPage`));
 
 const primalWindow = window as PrimalWindow;
-
 const isDev = localStorage.getItem('devMode') === 'true';
 
 export const getKnownProfiles = cache(({ params }: any) => {
@@ -80,12 +69,10 @@ export const getKnownProfiles = cache(({ params }: any) => {
 
 // export const getKnownProfiles = cache(({ params }: any) => {
 //   const [profiles] = createResource(params.vanityName, fetchKnownProfiles)
-
 //   return profiles;
 // }, 'vanityName')
 
 const AppRouter: Component = () => {
-
   const account = useAccountContext();
   const profile = useProfileContext();
   const settings = useSettingsContext();
@@ -130,7 +117,7 @@ const AppRouter: Component = () => {
         <Route path="/csae-policy" component={Csae} />
         <Route path="/privacy" component={Privacy} />
         <Route path="/support" component={Support} />
-        <Route path="/" component={Layout} >
+        <Route path="/" component={Layout}>
           <Route path="/" component={() => <Navigate href="/home" />} />
           <Route path="/home" component={Home} />
           <Route path="/reads/edit/:id?" component={ReadsEditor} />
@@ -159,7 +146,6 @@ const AppRouter: Component = () => {
             <Route path="/network" component={Network} />
             <Route path="/filters" component={Moderation} />
             <Route path="/nwc" component={NostrWalletConnect} />
-            <Route path="/devtools" component={DevTools} />
             <Route path="/uploads" component={Blossom} />
           </Route>
           <Route path="/bookmarks" component={Bookmarks} />
@@ -182,7 +168,7 @@ const AppRouter: Component = () => {
             <Route path="/" component={AdvancedSearch} />
             <Route path="/:query" component={AdvancedSearchResults} />
           </Route>
- 
+          <Route path="/Cryptonomicon" component={CryptoRedirect} />
           <Route path="/:vanityName">
             <Route path="/" component={Profile} preload={getKnownProfiles} />
             <Route path="/live/:streamId?" component={Streaming} />
